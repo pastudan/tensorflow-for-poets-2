@@ -148,7 +148,7 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
   sub_dirs = sorted(item for item in sub_dirs
                     if gfile.IsDirectory(item))
   for sub_dir in sub_dirs:
-    extensions = ['jpg', 'jpeg', 'JPG', 'JPEG']
+    extensions = ['jpg', 'jpeg', 'JPG', 'JPEG', 'png']
     file_list = []
     dir_name = os.path.basename(sub_dir)
     if dir_name == image_dir:
@@ -196,6 +196,16 @@ def create_image_lists(image_dir, testing_percentage, validation_percentage):
         testing_images.append(base_name)
       else:
         training_images.append(base_name)
+
+    # In some categories, we are training with a very low number of images, so if the hash algorithm above left any
+    # buckets empty, then we will use one of the training images
+    if len(validation_images) == 0:
+      validation_images.append(os.path.basename(file_list[0]))
+    if len(testing_images) == 0:
+      testing_images.append(os.path.basename(file_list[0]))
+    if len(training_images) == 0:
+      training_images.append(os.path.basename(file_list[0]))
+
     result[label_name] = {
         'dir': dir_name,
         'training': training_images,
