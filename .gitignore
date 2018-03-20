@@ -1,5 +1,7 @@
+venv
 **/*.pyc
-tf_files
+tf_files/*
+!tf_files/retrained_graph.pb
 .idea/
 **/*~
 gradle*
